@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main   # 排隊的 run 也拿最新 main，不用 dispatch 當下的舊 SHA
           fetch-depth: 1
       - name: snapshot
         run: python3 scripts/snapshot.py /tmp/rows.csv
