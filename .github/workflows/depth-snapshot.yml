@@ -1,0 +1,23 @@
+name: depth-snapshot
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: depth-snapshot
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: snapshot
+        run: python3 scripts/snapshot.py /tmp/rows.csv
+      - name: commit
+        run: |
+          git config user.name "depth-backup-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          scripts/commit_rows.sh /tmp/rows.csv
